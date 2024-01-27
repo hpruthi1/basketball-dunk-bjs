@@ -45,7 +45,7 @@ class Net {
     this.aggregate = new PhysicsAggregate(
       this.geometry!,
       PhysicsShapeType.MESH,
-      { mass: 1, restitution: 0.75 },
+      { mass: 0, restitution: 0.75 },
       this._scene
     );
 

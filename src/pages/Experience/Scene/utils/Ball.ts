@@ -20,6 +20,9 @@ export class Ball implements IInputReceiver {
   public geometry: Mesh | undefined;
   public aggregate: PhysicsAggregate | undefined;
 
+  public throwForce = 30;
+  public canShoot = true;
+
   constructor(inputManager: InputManager, scene: Scene) {
     this._scene = scene;
     this._camera = this._scene.activeCamera as ArcRotateCamera;
@@ -31,6 +34,20 @@ export class Ball implements IInputReceiver {
 
   handleKeyboardEvent(code: string, pressed: boolean): void {
     console.log(code, pressed);
+    if (code === "Space" && pressed && this.canShoot) {
+      this.aggregate?.body.applyImpulse(
+        this._camera
+          .getDirection(Vector3.Forward())
+          .normalize()
+          .scale(this.throwForce),
+        this.geometry!.getAbsolutePosition()
+      );
+      this.canShoot = false;
+
+      setTimeout(() => {
+        this.canShoot = true;
+      }, 1500);
+    }
     // console.log(this._camera.getDirection(Vector3.Forward()).normalize());
   }
 

@@ -1,4 +1,4 @@
-import { DistanceConstraint, Scene, TransformNode } from "@babylonjs/core";
+import { Scene, TransformNode } from "@babylonjs/core";
 import Pole from "./Pole";
 import Net from "./Net";
 import Board from "./Board";
@@ -10,7 +10,7 @@ class Goal extends TransformNode {
   public net: Net | undefined;
   public ring: Ring | undefined;
 
-  public distanceFromPlayer = 20;
+  public distanceFromPlayer = 33;
 
   constructor(scene: Scene) {
     super("Goal", scene);
@@ -33,7 +33,7 @@ class Goal extends TransformNode {
     netMesh.position.z = -2.5;
     netMesh.parent = this;
 
-    const netAggregate = this.net.attachPhysicsComponent();
+    this.net.attachPhysicsComponent();
 
     this.backboard = new Board(this._scene);
     const boardMesh = this.backboard.createGeometry();
@@ -50,13 +50,6 @@ class Goal extends TransformNode {
     ringMesh.parent = this;
 
     this.ring.attachPhysicsComponent();
-
-    const constraint = new DistanceConstraint(
-      1, // max distance between the two bodies
-      this._scene
-    );
-
-    this.ring.aggregate?.body.addConstraint(netAggregate.body, constraint);
   }
 }
 

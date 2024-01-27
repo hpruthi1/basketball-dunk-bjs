@@ -28,7 +28,7 @@ class InputManager {
 
           device.onInputChangedObservable.add((keyboardEvent) => {
             keyboardEvent.type === "keydown" && this.onKeyDown(keyboardEvent);
-            keyboardEvent.type === "keyup" && this.onKeyUp(keyboardEvent);
+            // keyboardEvent.type === "keyup" && this.onKeyUp(keyboardEvent);
           });
 
           break;
@@ -47,6 +47,10 @@ class InputManager {
 
   private onKeyDown(keyboardEvent: IKeyboardEvent) {
     if (this.inputReceiver !== undefined) {
+      //@ts-ignore
+      if (keyboardEvent.repeat) {
+        return;
+      }
       this.inputReceiver.handleKeyboardEvent(keyboardEvent.code, true);
     }
   }
