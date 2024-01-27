@@ -7,6 +7,7 @@ import {
 import { GridMaterial } from "@babylonjs/materials";
 
 export const CreateCourt = (scene: Scene) => {
+  4;
   const ground = CreateGround("ground", { width: 1000, height: 1000 }, scene);
   ground.position.y = -1;
 

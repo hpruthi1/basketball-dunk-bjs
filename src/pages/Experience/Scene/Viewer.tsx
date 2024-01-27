@@ -7,6 +7,7 @@ import { ArcRotateCamera, Engine, Nullable, Scene } from "@babylonjs/core";
 import * as Utils from "./utils/FunctionLibrary";
 import { Ball } from "./utils/Ball";
 import InputManager from "./managers/InputManager";
+import Goal from "./utils/Goal";
 
 interface IViewerState {}
 
@@ -62,9 +63,9 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     this.camera.fov = 1;
     this.camera.alpha = 1.57;
     this.camera.beta = 1.3;
-    this.camera.radius = 5;
+    this.camera.radius = 10;
     this.camera.minZ = 0;
-    this.camera.panningSensibility = 0;
+    // this.camera.panningSensibility = 0;
     this.camera.inputs.remove(this.camera.inputs.attached.keyboard);
     // this.camera.inputs.remove(this.camera.inputs.attached.mousewheel);
     // //@ts-ignore
@@ -82,6 +83,7 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
 
   setupEnvironment = async () => {
     Utils.CreateCourt(this.scene!);
+    new Goal(this.scene!);
     new Ball(this.inputManager!, this.scene!);
   };
 

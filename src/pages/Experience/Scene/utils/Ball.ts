@@ -4,6 +4,7 @@ import {
   MeshBuilder,
   PBRMaterial,
   PhysicsAggregate,
+  PhysicsMotionType,
   PhysicsShapeType,
   Scene,
   Texture,
@@ -30,7 +31,7 @@ export class Ball implements IInputReceiver {
 
   handleKeyboardEvent(code: string, pressed: boolean): void {
     console.log(code, pressed);
-    console.log(this._camera.getDirection(Vector3.Forward()).normalize());
+    // console.log(this._camera.getDirection(Vector3.Forward()).normalize());
   }
 
   inputReceiverInit(): void {
@@ -39,8 +40,8 @@ export class Ball implements IInputReceiver {
 
   createGeometry() {
     this.geometry = MeshBuilder.CreateSphere(
-      "sphere",
-      { diameter: 2, segments: 32 },
+      "ball",
+      { diameter: 1, segments: 32 },
       this._scene
     );
 
@@ -49,8 +50,6 @@ export class Ball implements IInputReceiver {
       this.geometry.rotation.y,
       Math.PI * 0.25
     );
-
-    this.geometry.scalingDeterminant = 0.5;
 
     const material = new PBRMaterial("ballMat", this._scene);
     material.unlit = true;
@@ -75,5 +74,9 @@ export class Ball implements IInputReceiver {
       { mass: 1, restitution: 0.75 },
       this._scene
     );
+
+    this.aggregate.body.setMotionType(PhysicsMotionType.DYNAMIC);
+
+    this.aggregate.body.setCollisionCallbackEnabled(true);
   }
 }
