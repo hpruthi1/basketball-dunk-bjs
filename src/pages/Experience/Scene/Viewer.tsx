@@ -4,6 +4,9 @@ import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import SceneComponent, { SceneEventArgs } from "./Scene";
 import { ArcRotateCamera, Engine, Nullable, Scene } from "@babylonjs/core";
+import * as Utils from "./utils/FunctionLibrary";
+import { Ball } from "./utils/Ball";
+import InputManager from "./managers/InputManager";
 
 interface IViewerState {}
 
@@ -16,6 +19,8 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
   private engine: Engine | undefined;
   private scene: Scene | undefined;
   private camera: ArcRotateCamera | undefined;
+
+  public inputManager: InputManager | undefined;
 
   constructor(props: IViewerProps | Readonly<IViewerProps>) {
     super(props);
@@ -30,6 +35,8 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
 
     this.prepareCamera();
     this.prepareLighting();
+
+    this.inputManager = new InputManager(this.engine);
 
     this.setupEnvironment();
 
@@ -57,7 +64,13 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     this.camera.beta = 1.3;
     this.camera.radius = 5;
     this.camera.minZ = 0;
+    this.camera.panningSensibility = 0;
     this.camera.inputs.remove(this.camera.inputs.attached.keyboard);
+    // this.camera.inputs.remove(this.camera.inputs.attached.mousewheel);
+    // //@ts-ignore
+    // this.camera.inputs.attached.pointers.buttons = [];
+
+    console.log(this.camera.inputs.attached);
 
     camera.alpha += Math.PI;
     this.camera.attachControl();
@@ -67,7 +80,10 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     this.scene!.createDefaultLight();
   };
 
-  setupEnvironment = async () => {};
+  setupEnvironment = async () => {
+    Utils.CreateCourt(this.scene!);
+    new Ball(this.inputManager!, this.scene!);
+  };
 
   render() {
     return (
