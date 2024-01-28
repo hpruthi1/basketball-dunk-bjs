@@ -1,5 +1,4 @@
 import {
-  ArcRotateCamera,
   Mesh,
   MeshBuilder,
   PBRMaterial,
@@ -8,6 +7,7 @@ import {
   PhysicsShapeType,
   Scene,
   Texture,
+  UniversalCamera,
   Vector3,
 } from "@babylonjs/core";
 import InputManager from "../managers/InputManager";
@@ -15,7 +15,7 @@ import { IInputReceiver } from "../interfaces/IInputReceiver";
 
 export class Ball implements IInputReceiver {
   private _scene: Scene;
-  private _camera: ArcRotateCamera;
+  private _camera: UniversalCamera;
 
   public geometry: Mesh | undefined;
   public aggregate: PhysicsAggregate | undefined;
@@ -25,7 +25,7 @@ export class Ball implements IInputReceiver {
 
   constructor(inputManager: InputManager, scene: Scene) {
     this._scene = scene;
-    this._camera = this._scene.activeCamera as ArcRotateCamera;
+    this._camera = this._scene.activeCamera as UniversalCamera;
     this.createGeometry();
     this.attachPhysicsComponent();
 
@@ -58,9 +58,14 @@ export class Ball implements IInputReceiver {
   createGeometry() {
     this.geometry = MeshBuilder.CreateSphere(
       "ball",
-      { diameter: 1, segments: 32 },
+      { diameter: 0.95, segments: 32 },
       this._scene
     );
+
+    // const net = this._scene.getMeshByName("net");
+    // const netPos = net?.getAbsolutePosition();
+    // if (netPos)
+    //   this.geometry.position = new Vector3(netPos.x, netPos.y + 3, netPos.z);
 
     this.geometry.rotation = new Vector3(
       Math.PI * 0.5,
@@ -88,7 +93,7 @@ export class Ball implements IInputReceiver {
     this.aggregate = new PhysicsAggregate(
       this.geometry!,
       PhysicsShapeType.SPHERE,
-      { mass: 1, restitution: 0.75 },
+      { mass: 1, restitution: 0 },
       this._scene
     );
 

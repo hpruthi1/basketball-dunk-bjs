@@ -18,7 +18,7 @@ class Board {
     this._scene = scene;
   }
 
-  createGeometry() {
+  public createGeometry(): Mesh {
     this.geometry = MeshBuilder.CreateBox(
       "board",
       {
@@ -47,12 +47,11 @@ class Board {
     return this.geometry;
   }
 
-  attachPhysicsComponent() {
-    // throw new Error("Method not implemented.");
+  public attachPhysicsComponent(): void {
     this.aggregate = new PhysicsAggregate(
       this.geometry!,
       PhysicsShapeType.BOX,
-      { mass: 0, restitution: 0.75 },
+      { mass: 0, restitution: 0 },
       this._scene
     );
   }

@@ -3,7 +3,13 @@ import "@babylonjs/core/Helpers/sceneHelpers";
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import SceneComponent, { SceneEventArgs } from "./Scene";
-import { ArcRotateCamera, Engine, Nullable, Scene } from "@babylonjs/core";
+import {
+  Engine,
+  Nullable,
+  Scene,
+  UniversalCamera,
+  Vector3,
+} from "@babylonjs/core";
 import * as Utils from "./utils/FunctionLibrary";
 import { Ball } from "./utils/Ball";
 import InputManager from "./managers/InputManager";
@@ -19,7 +25,7 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     | undefined;
   private engine: Engine | undefined;
   private scene: Scene | undefined;
-  private camera: ArcRotateCamera | undefined;
+  private camera: UniversalCamera | undefined;
 
   public inputManager: InputManager | undefined;
 
@@ -57,24 +63,36 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
   };
 
   prepareCamera = () => {
-    this.scene!.createDefaultCamera(true);
-    const camera = this.scene!.activeCamera as ArcRotateCamera;
-    this.camera = camera;
-    this.camera.fov = 1;
-    this.camera.alpha = 1.57;
-    this.camera.beta = 1.3;
-    this.camera.radius = 10;
-    this.camera.minZ = 0;
-    // this.camera.panningSensibility = 0;
-    this.camera.inputs.remove(this.camera.inputs.attached.keyboard);
-    // this.camera.inputs.remove(this.camera.inputs.attached.mousewheel);
-    // //@ts-ignore
-    // this.camera.inputs.attached.pointers.buttons = [];
+    this.camera = new UniversalCamera(
+      "MainCamera",
+      new Vector3(0, 0, -5),
+      this.scene
+    );
+    this.camera.setTarget(Vector3.Zero());
+    this.camera.attachControl(this.canvas, true);
 
-    console.log(this.camera.inputs.attached);
+    this.camera.speed = 0.2;
 
-    camera.alpha += Math.PI;
-    this.camera.attachControl();
+    this.camera.inputs.addMouseWheel();
+
+    // this.scene!.createDefaultCamera(true);
+    // const camera = this.scene!.activeCamera as ArcRotateCamera;
+    // this.camera = camera;
+    // this.camera.fov = 1;
+    // this.camera.alpha = 1.57;
+    // this.camera.beta = 1.3;
+    // this.camera.radius = 10;
+    // this.camera.minZ = 0;
+    // // this.camera.panningSensibility = 0;
+    // this.camera.inputs.remove(this.camera.inputs.attached.keyboard);
+    // // this.camera.inputs.remove(this.camera.inputs.attached.mousewheel);
+    // // //@ts-ignore
+    // // this.camera.inputs.attached.pointers.buttons = [];
+
+    // console.log(this.camera.inputs.attached);
+
+    // camera.alpha += Math.PI;
+    // this.camera.attachControl();
   };
 
   prepareLighting = () => {

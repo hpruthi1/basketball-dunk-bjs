@@ -17,7 +17,8 @@ class Ring {
   constructor(scene: Scene) {
     this._scene = scene;
   }
-  createGeometry() {
+
+  public createGeometry() {
     this.geometry = MeshBuilder.CreateTorus(
       "ring",
       {
@@ -34,7 +35,7 @@ class Ring {
     return this.geometry;
   }
 
-  attachPhysicsComponent() {
+  public attachPhysicsComponent() {
     // throw new Error("Method not implemented.");
     this.aggregate = new PhysicsAggregate(
       this.geometry!,

@@ -16,7 +16,8 @@ class Net {
   constructor(scene: Scene) {
     this._scene = scene;
   }
-  createGeometry() {
+
+  public createGeometry(): Mesh {
     this.geometry = MeshBuilder.CreateCylinder(
       "net",
       {
@@ -40,16 +41,13 @@ class Net {
     return this.geometry;
   }
 
-  attachPhysicsComponent() {
-    // throw new Error("Method not implemented.");
+  public attachPhysicsComponent(): void {
     this.aggregate = new PhysicsAggregate(
       this.geometry!,
       PhysicsShapeType.MESH,
       { mass: 0, restitution: 0.75 },
       this._scene
     );
-
-    return this.aggregate;
   }
 }
 
