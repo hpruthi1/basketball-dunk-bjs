@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, useContext } from "react";
 import "@babylonjs/core/Helpers/sceneHelpers";
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
@@ -16,12 +16,25 @@ import InputManager from "./managers/InputManager";
 import Goal from "./utils/Goal";
 import Player from "./player/Player";
 import GameManager from "./managers/GameManager";
+import { experienceConext } from "../../../context/Context";
 
 interface IViewerState {}
 
-interface IViewerProps {}
+interface IViewerProps {
+  experienceContextProp: unknown;
+}
 
-export class Viewer extends Component<IViewerProps, IViewerState> {
+const ViewerFC = (props) => {
+  const experienceContextRef = useContext(experienceConext);
+  return (
+    <Viewer
+      ref={props.viewerRef}
+      experienceContextProp={experienceContextRef}
+    />
+  );
+};
+
+class Viewer extends Component<IViewerProps, IViewerState> {
   private canvas:
     | Nullable<HTMLCanvasElement | WebGLRenderingContext>
     | undefined;
@@ -92,6 +105,8 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     this.ball = new Ball(this.scene!);
     this.player = new Player(this.inputManager!, this.ball, this.scene!);
     this.gameManager = new GameManager(this.player);
+    //@ts-ignore
+    this.props.experienceContext?.setisLoading(false);
   };
 
   render() {
@@ -111,4 +126,4 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
   }
 }
 
-export default Viewer;
+export default ViewerFC;
