@@ -33,20 +33,6 @@ class SceneComponent extends Component<
     }
 
     GLTFFileLoader.IncrementalLoading = false;
-    const audioEngine = Engine.audioEngine;
-    if (audioEngine) {
-      audioEngine.useCustomUnlockedButton = true;
-    }
-
-    window.addEventListener(
-      "click",
-      () => {
-        if (!Engine.audioEngine?.unlocked) {
-          Engine.audioEngine?.unlock();
-        }
-      },
-      { once: true }
-    );
 
     const useWebGPU = !!navigator.gpu;
     this.canvas = document.getElementById("studio") as HTMLCanvasElement;

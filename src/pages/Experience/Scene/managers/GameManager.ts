@@ -1,11 +1,15 @@
 import Player from "../player/Player";
+import SfxSystem from "../systems/sound-effects-system";
 
 class GameManager {
   public player: Player;
+  private _sfxSystem: SfxSystem;
+
   private score: number = 0;
 
-  constructor(player: Player) {
+  constructor(player: Player, sfxSystem: SfxSystem) {
     this.player = player;
+    this._sfxSystem = sfxSystem;
   }
 
   get Score() {

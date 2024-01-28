@@ -1,28 +1,30 @@
 import { useRef, useState } from "react";
 import ExperienceUI from "./ExperienceUI/ExperienceUI";
-import { experienceConext } from "../../context/Context";
-import ViewerFC from "./Scene/Viewer";
+import { experienceContext } from "../../context/Context";
+import ViewerFC, { Viewer } from "./Scene/Viewer";
 
 const Experience = () => {
-  const viewerRef = useRef<typeof ViewerFC>(null);
-
+  const viewerRef = useRef<Viewer>(null);
   const [isLoading, setisLoading] = useState(true);
+  const [musicPlaying, setmusicPlaying] = useState(true);
 
-  const [ambientMusic, setambientMusic] = useState(false);
-  const [volume, setvolume] = useState(0);
+  const toggleAmbientSound = () => {
+    viewerRef?.current?.toggleAmbientSound();
+  };
 
   return (
-    <experienceConext.Provider
+    <experienceContext.Provider
       value={{
         isLoading: isLoading,
+        musicPlaying: musicPlaying,
+        setmusicPlaying: setmusicPlaying,
         setisLoading: setisLoading,
-        setambientMusic: setambientMusic,
-        setvolume: setvolume,
+        toggleAmbientSound: toggleAmbientSound,
       }}
     >
       <ExperienceUI />
       <ViewerFC viewerRef={viewerRef} />
-    </experienceConext.Provider>
+    </experienceContext.Provider>
   );
 };
 

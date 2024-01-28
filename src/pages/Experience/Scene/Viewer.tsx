@@ -1,4 +1,4 @@
-import { Component, useContext } from "react";
+import { Component, LegacyRef, useContext } from "react";
 import "@babylonjs/core/Helpers/sceneHelpers";
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
@@ -7,6 +7,7 @@ import {
   Engine,
   Nullable,
   Scene,
+  Sound,
   UniversalCamera,
   Vector3,
 } from "@babylonjs/core";
@@ -16,16 +17,20 @@ import InputManager from "./managers/InputManager";
 import Goal from "./utils/Goal";
 import Player from "./player/Player";
 import GameManager from "./managers/GameManager";
-import { experienceConext } from "../../../context/Context";
+import {
+  IExperienceContextType,
+  experienceContext,
+} from "../../../context/Context";
+import SfxSystem from "./systems/sound-effects-system";
 
 interface IViewerState {}
 
 interface IViewerProps {
-  experienceContextProp: unknown;
+  experienceContextProp: IExperienceContextType;
 }
 
-const ViewerFC = (props) => {
-  const experienceContextRef = useContext(experienceConext);
+const ViewerFC = (props: { viewerRef: LegacyRef<Viewer> | undefined }) => {
+  const experienceContextRef = useContext(experienceContext);
   return (
     <Viewer
       ref={props.viewerRef}
@@ -34,7 +39,7 @@ const ViewerFC = (props) => {
   );
 };
 
-class Viewer extends Component<IViewerProps, IViewerState> {
+export class Viewer extends Component<IViewerProps, IViewerState> {
   private canvas:
     | Nullable<HTMLCanvasElement | WebGLRenderingContext>
     | undefined;
@@ -46,7 +51,11 @@ class Viewer extends Component<IViewerProps, IViewerState> {
   private ball: Ball | undefined;
   public player: Player | undefined;
 
+  private ambientSound: Sound | undefined;
+
   public gameManager: GameManager | undefined;
+
+  public sfxSystem: SfxSystem | undefined;
 
   constructor(props: IViewerProps | Readonly<IViewerProps>) {
     super(props);
@@ -104,10 +113,35 @@ class Viewer extends Component<IViewerProps, IViewerState> {
     new Goal(this.scene!);
     this.ball = new Ball(this.scene!);
     this.player = new Player(this.inputManager!, this.ball, this.scene!);
-    this.gameManager = new GameManager(this.player);
-    //@ts-ignore
-    this.props.experienceContext?.setisLoading(false);
+    this.sfxSystem = SfxSystem.getSfxSystem();
+    await this.sfxSystem.loadSounds();
+    this.gameManager = new GameManager(this.player, this.sfxSystem!);
+    this.loadAmbientSound();
+    this.props.experienceContextProp?.setisLoading(false);
   };
+
+  loadAmbientSound() {
+    this.ambientSound = new Sound(
+      "ambient-sound",
+      "/Sounds/ambient-music.mp3",
+      this.scene,
+      null,
+      {
+        volume: 0.1,
+        loop: true,
+        autoplay: true,
+      }
+    );
+  }
+
+  toggleAmbientSound() {
+    const currentVolume = this.ambientSound?.getVolume();
+    currentVolume! > 0
+      ? this.ambientSound?.setVolume(0)
+      : this.ambientSound?.setVolume(1);
+
+    this.props.experienceContextProp.setmusicPlaying((value) => !value);
+  }
 
   render() {
     return (

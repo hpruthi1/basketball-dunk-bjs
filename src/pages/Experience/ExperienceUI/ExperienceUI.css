@@ -1,0 +1,9 @@
+.experience_ui_root {
+  position: absolute;
+  top: 2em;
+  right: 2vw;
+  width: 3em;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}

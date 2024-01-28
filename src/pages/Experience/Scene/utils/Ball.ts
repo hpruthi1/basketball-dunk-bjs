@@ -71,4 +71,11 @@ export class Ball {
 
     this.aggregate.body.setCollisionCallbackEnabled(true);
   }
+
+  shoot(force: number = 30) {
+    this.aggregate?.body.applyImpulse(
+      this._camera.getDirection(Vector3.Forward()).normalize().scale(force),
+      this.geometry!.getAbsolutePosition()
+    );
+  }
 }
