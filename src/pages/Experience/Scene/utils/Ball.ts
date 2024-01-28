@@ -10,49 +10,19 @@ import {
   UniversalCamera,
   Vector3,
 } from "@babylonjs/core";
-import InputManager from "../managers/InputManager";
-import { IInputReceiver } from "../interfaces/IInputReceiver";
 
-export class Ball implements IInputReceiver {
+export class Ball {
   private _scene: Scene;
   private _camera: UniversalCamera;
 
   public geometry: Mesh | undefined;
   public aggregate: PhysicsAggregate | undefined;
 
-  public throwForce = 30;
-  public canShoot = true;
-
-  constructor(inputManager: InputManager, scene: Scene) {
+  constructor(scene: Scene) {
     this._scene = scene;
     this._camera = this._scene.activeCamera as UniversalCamera;
     this.createGeometry();
     this.attachPhysicsComponent();
-
-    inputManager.setInputReceiver(this);
-  }
-
-  handleKeyboardEvent(code: string, pressed: boolean): void {
-    console.log(code, pressed);
-    if (code === "Space" && pressed && this.canShoot) {
-      this.aggregate?.body.applyImpulse(
-        this._camera
-          .getDirection(Vector3.Forward())
-          .normalize()
-          .scale(this.throwForce),
-        this.geometry!.getAbsolutePosition()
-      );
-      this.canShoot = false;
-
-      setTimeout(() => {
-        this.canShoot = true;
-      }, 1500);
-    }
-    // console.log(this._camera.getDirection(Vector3.Forward()).normalize());
-  }
-
-  inputReceiverInit(): void {
-    console.log("Display UI");
   }
 
   createGeometry() {

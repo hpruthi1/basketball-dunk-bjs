@@ -36,7 +36,7 @@ class Net {
         height: 2,
         cap: Mesh.NO_CAP,
         sideOrientation: Mesh.DOUBLESIDE,
-        subdivisions: 2,
+        subdivisions: 8,
         hasRings: true,
       },
       this._scene

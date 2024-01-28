@@ -14,6 +14,8 @@ import * as Utils from "./utils/FunctionLibrary";
 import { Ball } from "./utils/Ball";
 import InputManager from "./managers/InputManager";
 import Goal from "./utils/Goal";
+import Player from "./player/Player";
+import GameManager from "./managers/GameManager";
 
 interface IViewerState {}
 
@@ -28,6 +30,10 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
   private camera: UniversalCamera | undefined;
 
   public inputManager: InputManager | undefined;
+  private ball: Ball | undefined;
+  public player: Player | undefined;
+
+  public gameManager: GameManager | undefined;
 
   constructor(props: IViewerProps | Readonly<IViewerProps>) {
     super(props);
@@ -83,7 +89,9 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
   setupEnvironment = async () => {
     Utils.CreateCourt(this.scene!);
     new Goal(this.scene!);
-    new Ball(this.inputManager!, this.scene!);
+    this.ball = new Ball(this.scene!);
+    this.player = new Player(this.inputManager!, this.ball, this.scene!);
+    this.gameManager = new GameManager(this.player);
   };
 
   render() {
