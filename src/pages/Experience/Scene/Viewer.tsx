@@ -74,25 +74,6 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     this.camera.speed = 0.2;
 
     this.camera.inputs.addMouseWheel();
-
-    // this.scene!.createDefaultCamera(true);
-    // const camera = this.scene!.activeCamera as ArcRotateCamera;
-    // this.camera = camera;
-    // this.camera.fov = 1;
-    // this.camera.alpha = 1.57;
-    // this.camera.beta = 1.3;
-    // this.camera.radius = 10;
-    // this.camera.minZ = 0;
-    // // this.camera.panningSensibility = 0;
-    // this.camera.inputs.remove(this.camera.inputs.attached.keyboard);
-    // // this.camera.inputs.remove(this.camera.inputs.attached.mousewheel);
-    // // //@ts-ignore
-    // // this.camera.inputs.attached.pointers.buttons = [];
-
-    // console.log(this.camera.inputs.attached);
-
-    // camera.alpha += Math.PI;
-    // this.camera.attachControl();
   };
 
   prepareLighting = () => {

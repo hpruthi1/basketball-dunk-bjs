@@ -6,16 +6,21 @@ import {
   PhysicsShapeType,
   Scene,
   StandardMaterial,
+  TransformNode,
 } from "@babylonjs/core";
 
 class Pole {
   private _scene: Scene;
+  private _parent: TransformNode;
 
   public geometry: Mesh | undefined;
   public aggregate: PhysicsAggregate | undefined;
 
-  constructor(scene: Scene) {
+  constructor(parent: TransformNode, scene: Scene) {
     this._scene = scene;
+    this._parent = parent;
+    this.createGeometry();
+    this.attachPhysicsComponent();
   }
 
   createGeometry() {
@@ -30,12 +35,13 @@ class Pole {
       this._scene
     );
 
-    const material = new StandardMaterial("netMat", this._scene);
+    const material = new StandardMaterial("poleMat", this._scene);
     this.geometry.material = material;
     material.diffuseColor = Color3.White();
     material.alpha = 0.5;
 
-    return this.geometry;
+    this.geometry.parent = this._parent;
+    this.geometry.position.y = 8;
   }
 
   attachPhysicsComponent() {

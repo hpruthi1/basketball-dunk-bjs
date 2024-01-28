@@ -27,37 +27,13 @@ class Goal extends TransformNode {
   }
 
   private instantiate(): void {
-    this.pole = new Pole(this._scene);
-    const poleMesh = this.pole.createGeometry();
+    this.pole = new Pole(this, this._scene);
 
-    poleMesh.parent = this;
-    poleMesh.position.y = 8;
+    this.net = new Net(this, this._scene);
 
-    this.pole.attachPhysicsComponent();
+    this.backboard = new Board(this, this._scene);
 
-    this.net = new Net(this._scene);
-    const netMesh = this.net.createGeometry();
-    netMesh.parent = this;
-    netMesh.position.y = 15;
-    netMesh.position.z = -2.5;
-
-    this.net.attachPhysicsComponent();
-
-    this.backboard = new Board(this._scene);
-    const boardMesh = this.backboard.createGeometry();
-    boardMesh.parent = this;
-    boardMesh.position.y = 18;
-    boardMesh.position.z = -1;
-
-    this.backboard.attachPhysicsComponent();
-
-    this.ring = new Ring(this._scene);
-    const ringMesh = this.ring.createGeometry();
-    ringMesh.parent = this;
-    ringMesh.position.y = 16;
-    ringMesh.position.z = -2.5;
-
-    this.ring.attachPhysicsComponent();
+    this.ring = new Ring(this, this._scene);
 
     this.createColliders();
   }
@@ -86,14 +62,14 @@ class Goal extends TransformNode {
 
     collider2.visibility = 0.1;
 
-    const physicsCollider1 = new PhysicsAggregate(
+    new PhysicsAggregate(
       collider1,
       PhysicsShapeType.MESH,
       { mass: 0, isTriggerShape: true },
       this._scene
     );
 
-    const physicsCollider2 = new PhysicsAggregate(
+    new PhysicsAggregate(
       collider2,
       PhysicsShapeType.MESH,
       { mass: 0, isTriggerShape: true },

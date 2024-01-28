@@ -6,19 +6,24 @@ import {
   Scene,
   StandardMaterial,
   Texture,
+  TransformNode,
 } from "@babylonjs/core";
 
 class Board {
   private _scene: Scene;
+  private _parent: TransformNode;
 
   public geometry: Mesh | undefined;
   public aggregate: PhysicsAggregate | undefined;
 
-  constructor(scene: Scene) {
+  constructor(parent: TransformNode, scene: Scene) {
     this._scene = scene;
+    this._parent = parent;
+    this.createGeometry();
+    this.attachPhysicsComponent();
   }
 
-  public createGeometry(): Mesh {
+  public createGeometry() {
     this.geometry = MeshBuilder.CreateBox(
       "board",
       {
@@ -30,7 +35,7 @@ class Board {
       this._scene
     );
 
-    const material = new StandardMaterial("netMat", this._scene);
+    const material = new StandardMaterial("boardMat", this._scene);
 
     const texture = new Texture(
       "backboard.png",
@@ -44,7 +49,9 @@ class Board {
 
     this.geometry.material = material;
 
-    return this.geometry;
+    this.geometry.parent = this._parent;
+    this.geometry.position.y = 18;
+    this.geometry.position.z = -1;
   }
 
   public attachPhysicsComponent(): void {

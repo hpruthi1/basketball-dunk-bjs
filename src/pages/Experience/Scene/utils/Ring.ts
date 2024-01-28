@@ -6,16 +6,22 @@ import {
   PhysicsShapeType,
   Scene,
   StandardMaterial,
+  TransformNode,
 } from "@babylonjs/core";
 
 class Ring {
   private _scene: Scene;
+  private _parent: TransformNode;
 
   public geometry: Mesh | undefined;
   public aggregate: PhysicsAggregate | undefined;
 
-  constructor(scene: Scene) {
+  constructor(parent: TransformNode, scene: Scene) {
     this._scene = scene;
+    this._parent = parent;
+
+    this.createGeometry();
+    this.attachPhysicsComponent();
   }
 
   public createGeometry() {
@@ -28,11 +34,13 @@ class Ring {
       this._scene
     );
 
-    const material = new StandardMaterial("netMat", this._scene);
+    const material = new StandardMaterial("ringMat", this._scene);
     this.geometry.material = material;
     material.diffuseColor = Color3.Red();
 
-    return this.geometry;
+    this.geometry.parent = this._parent;
+    this.geometry.position.y = 16;
+    this.geometry.position.z = -2.5;
   }
 
   public attachPhysicsComponent() {
