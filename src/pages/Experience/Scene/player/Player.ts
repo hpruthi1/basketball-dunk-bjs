@@ -3,6 +3,7 @@ import { Ball } from "../utils/Ball";
 import { IInputReceiver } from "../interfaces/IInputReceiver";
 import { Scene } from "@babylonjs/core";
 import SfxSystem, { SoundEnum } from "../systems/sound-effects-system";
+import { Viewer } from "../Viewer";
 
 class Player implements IInputReceiver {
   public ball: Ball;
@@ -13,10 +14,13 @@ class Player implements IInputReceiver {
   public throwForce = 30;
   public canShoot = true;
 
-  constructor(inputManager: InputManager, ball: Ball, scene: Scene) {
-    this.ball = ball;
-    this._inputManager = inputManager;
-    this._scene = scene;
+  private _viewer: Viewer | undefined;
+
+  constructor(viewer: Viewer) {
+    this._viewer = viewer;
+    this.ball = viewer.ball!;
+    this._inputManager = viewer.inputManager!;
+    this._scene = viewer.scene!;
     this._inputManager.setInputReceiver(this);
   }
 
@@ -32,9 +36,17 @@ class Player implements IInputReceiver {
       this.canShoot = false;
 
       setTimeout(() => {
+        const data = this.ball.geometry?.metadata;
+
+        if (data?.passthroughSensor1 && data?.passthroughSensor2) {
+          this._viewer!.gameManager!.score += 20;
+          this._viewer?.props.experienceContextProp.setscore(
+            this._viewer!.gameManager!.score
+          );
+        }
         this.respawn();
         this.canShoot = true;
-      }, 2000);
+      }, 5000);
     }
   }
 

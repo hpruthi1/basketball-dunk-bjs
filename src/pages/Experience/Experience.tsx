@@ -8,8 +8,14 @@ const Experience = () => {
   const [isLoading, setisLoading] = useState(true);
   const [musicPlaying, setmusicPlaying] = useState(true);
 
+  const [score, setscore] = useState(0);
+
   const toggleAmbientSound = () => {
     viewerRef?.current?.toggleAmbientSound();
+  };
+
+  const getGameManager = () => {
+    return viewerRef?.current?.gameManager;
   };
 
   return (
@@ -20,6 +26,9 @@ const Experience = () => {
         setmusicPlaying: setmusicPlaying,
         setisLoading: setisLoading,
         toggleAmbientSound: toggleAmbientSound,
+        score: score,
+        setscore: setscore,
+        getGameManager: getGameManager,
       }}
     >
       <ExperienceUI />

@@ -5,7 +5,6 @@ import { Scene } from "@babylonjs/core/scene";
 import { Nullable } from "@babylonjs/core/types";
 import { WebGPUEngine } from "@babylonjs/core/Engines/webgpuEngine";
 import { EngineOptions } from "@babylonjs/core/Engines/thinEngine";
-import { initializePhysicsEngine } from "./systems/physics-system";
 import { GLTFFileLoader } from "@babylonjs/loaders/glTF";
 
 export type SceneEventArgs = {
@@ -67,8 +66,6 @@ class SceneComponent extends Component<
 
     const scene = new Scene(this.engine);
     this.scene = scene;
-
-    await initializePhysicsEngine(this.scene);
 
     if (typeof onSceneMount === "function") {
       onSceneMount({

@@ -9,7 +9,7 @@ const soundsAndURLs = [[SoundEnum.SHOOT.toString(), "/Sounds/shoot.wav"]];
 class SfxSystem {
   public sounds: Map<string, Sound>;
 
-  public static sfxSystemInstance: SfxSystem;
+  public static instance: SfxSystem;
 
   constructor() {
     this.sounds = new Map<string, Sound>();
@@ -29,8 +29,8 @@ class SfxSystem {
   }
 
   public static getSfxSystem(): SfxSystem {
-    if (!this.sfxSystemInstance) this.sfxSystemInstance = new SfxSystem();
-    return this.sfxSystemInstance;
+    if (!this.instance) this.instance = new SfxSystem();
+    return this.instance;
   }
 
   async loadSounds() {

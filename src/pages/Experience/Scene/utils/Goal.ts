@@ -39,38 +39,38 @@ class Goal extends TransformNode {
   }
 
   private createColliders(): void {
-    const collider1 = MeshBuilder.CreateDisc("collider1", {
+    const sensor1 = MeshBuilder.CreateDisc("collider1", {
       radius: 0.75,
       sideOrientation: Mesh.DOUBLESIDE,
     });
 
     const ringPos = this.ring?.geometry?.getAbsolutePosition();
-    collider1.position = new Vector3(ringPos?.x, ringPos!.y + 0.02, ringPos?.z);
+    sensor1.position = new Vector3(ringPos?.x, ringPos!.y + 0.02, ringPos?.z);
 
-    collider1.rotation.x = Math.PI / 2;
+    sensor1.rotation.x = Math.PI / 2;
 
-    collider1.visibility = 0.1;
+    sensor1.visibility = 0.1;
 
-    const collider2 = MeshBuilder.CreateDisc("collider2", {
+    const sensor2 = MeshBuilder.CreateDisc("collider2", {
       radius: 0.5,
       sideOrientation: Mesh.DOUBLESIDE,
     });
 
     const netPos = this.net?.geometry?.getAbsolutePosition();
-    collider2.position = new Vector3(netPos?.x, netPos!.y - 1, netPos?.z);
-    collider2.rotation.x = Math.PI / 2;
+    sensor2.position = new Vector3(netPos?.x, netPos!.y - 1, netPos?.z);
+    sensor2.rotation.x = Math.PI / 2;
 
-    collider2.visibility = 0.1;
+    sensor2.visibility = 0.1;
 
     new PhysicsAggregate(
-      collider1,
+      sensor1,
       PhysicsShapeType.MESH,
       { mass: 0, isTriggerShape: true },
       this._scene
     );
 
     new PhysicsAggregate(
-      collider2,
+      sensor2,
       PhysicsShapeType.MESH,
       { mass: 0, isTriggerShape: true },
       this._scene

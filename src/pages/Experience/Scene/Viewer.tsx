@@ -5,6 +5,7 @@ import "@babylonjs/inspector";
 import SceneComponent, { SceneEventArgs } from "./Scene";
 import {
   Engine,
+  HavokPlugin,
   Nullable,
   Scene,
   Sound,
@@ -22,6 +23,7 @@ import {
   experienceContext,
 } from "../../../context/Context";
 import SfxSystem from "./systems/sound-effects-system";
+import { initializePhysicsEngine } from "./systems/physics-system";
 
 interface IViewerState {}
 
@@ -44,14 +46,16 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     | Nullable<HTMLCanvasElement | WebGLRenderingContext>
     | undefined;
   private engine: Engine | undefined;
-  private scene: Scene | undefined;
+  public scene: Scene | undefined;
   private camera: UniversalCamera | undefined;
 
   public inputManager: InputManager | undefined;
-  private ball: Ball | undefined;
+  public ball: Ball | undefined;
   public player: Player | undefined;
 
   private ambientSound: Sound | undefined;
+
+  public havokPlugin: HavokPlugin | undefined;
 
   public gameManager: GameManager | undefined;
 
@@ -62,7 +66,7 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     this.state = {};
   }
 
-  onSceneMount = (e: SceneEventArgs) => {
+  onSceneMount = async (e: SceneEventArgs) => {
     const { canvas, scene, engine } = e;
     this.canvas = canvas;
     this.engine = engine;
@@ -70,6 +74,8 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
 
     this.prepareCamera();
     this.prepareLighting();
+
+    this.havokPlugin = await initializePhysicsEngine(this.scene);
 
     this.inputManager = new InputManager(this.engine);
 
@@ -89,6 +95,11 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
       }
     });
   };
+
+  componentWillUnmount(): void {
+    this.scene?.dispose();
+    this.engine?.dispose();
+  }
 
   prepareCamera = () => {
     this.camera = new UniversalCamera(
@@ -112,10 +123,14 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     Utils.CreateCourt(this.scene!);
     new Goal(this.scene!);
     this.ball = new Ball(this.scene!);
-    this.player = new Player(this.inputManager!, this.ball, this.scene!);
+    this.player = new Player(this);
     this.sfxSystem = SfxSystem.getSfxSystem();
     await this.sfxSystem.loadSounds();
-    this.gameManager = new GameManager(this.player, this.sfxSystem!);
+    this.gameManager = new GameManager(
+      this.havokPlugin!,
+      this.player,
+      this.sfxSystem!
+    );
     this.loadAmbientSound();
     this.props.experienceContextProp?.setisLoading(false);
   };

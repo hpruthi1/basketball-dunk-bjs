@@ -1,6 +1,7 @@
 import {
   Mesh,
   MeshBuilder,
+  Observable,
   PBRMaterial,
   PhysicsAggregate,
   PhysicsMotionType,
@@ -17,6 +18,8 @@ export class Ball {
 
   public geometry: Mesh | undefined;
   public aggregate: PhysicsAggregate | undefined;
+
+  public observable: Observable<unknown> | undefined;
 
   constructor(scene: Scene) {
     this._scene = scene;
@@ -57,6 +60,8 @@ export class Ball {
     material.albedoTexture = ballTexture;
 
     this.geometry.material = material;
+
+    this.observable = new Observable();
   }
 
   attachPhysicsComponent() {

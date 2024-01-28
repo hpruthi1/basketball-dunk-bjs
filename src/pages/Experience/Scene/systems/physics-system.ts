@@ -6,4 +6,6 @@ export const initializePhysicsEngine = async (scene: Scene) => {
   const havokInstance = await HavokPhysics();
   const havokPlugin = new HavokPlugin(true, havokInstance);
   scene.enablePhysics(undefined, havokPlugin);
+
+  return havokPlugin;
 };
