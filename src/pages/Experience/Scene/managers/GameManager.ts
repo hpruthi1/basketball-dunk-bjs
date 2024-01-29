@@ -1,18 +1,15 @@
 import { HavokPlugin } from "@babylonjs/core";
 import Player from "../player/Player";
-import SfxSystem from "../systems/sound-effects-system";
 
 class GameManager {
   public player: Player;
-  private _sfxSystem: SfxSystem;
 
   private _havokPlugin: HavokPlugin | undefined;
 
   private _score: number = 0;
 
-  constructor(havok: HavokPlugin, player: Player, sfxSystem: SfxSystem) {
+  constructor(havok: HavokPlugin, player: Player) {
     this.player = player;
-    this._sfxSystem = sfxSystem;
     this._havokPlugin = havok;
     this.listenEventsOnBall();
   }

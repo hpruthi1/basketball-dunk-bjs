@@ -24,7 +24,6 @@ class SceneComponent extends Component<
 > {
   private engine!: Engine;
   private canvas!: Nullable<HTMLCanvasElement | WebGLRenderingContext>;
-  private scene!: Scene;
 
   async initEngine(engineOptions: EngineOptions, adaptToDeviceRatio: boolean) {
     if (!Engine.isSupported()) {
@@ -65,7 +64,6 @@ class SceneComponent extends Component<
     )) as Engine;
 
     const scene = new Scene(this.engine);
-    this.scene = scene;
 
     if (typeof onSceneMount === "function") {
       onSceneMount({

@@ -4,14 +4,12 @@ import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import SceneComponent, { SceneEventArgs } from "./Scene";
 import {
-  ArcRotateCamera,
   Engine,
   FreeCamera,
   HavokPlugin,
   Nullable,
   Scene,
   Sound,
-  UniversalCamera,
   Vector3,
 } from "@babylonjs/core";
 import * as Utils from "./utils/FunctionLibrary";
@@ -146,11 +144,7 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     this.player = new Player(this);
     this.sfxSystem = SfxSystem.getSfxSystem();
     await this.sfxSystem.loadSounds();
-    this.gameManager = new GameManager(
-      this.havokPlugin!,
-      this.player,
-      this.sfxSystem!
-    );
+    this.gameManager = new GameManager(this.havokPlugin!, this.player);
     this.loadAmbientSound();
     this.props.experienceContextProp?.setisLoading(false);
   };
