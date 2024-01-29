@@ -1,7 +1,7 @@
 import InputManager from "../managers/InputManager";
 import { Ball } from "../utils/Ball";
 import { IInputReceiver } from "../interfaces/IInputReceiver";
-import { Scene, UniversalCamera, Vector3 } from "@babylonjs/core";
+import { FreeCamera, Scene, Vector3 } from "@babylonjs/core";
 import SfxSystem, { SoundEnum } from "../systems/sound-effects-system";
 import { Viewer } from "../Viewer";
 
@@ -28,7 +28,7 @@ class Player implements IInputReceiver {
   }
 
   update() {
-    const camera = this._scene.activeCamera as UniversalCamera;
+    const camera = this._scene.activeCamera as FreeCamera;
     this._scene.registerBeforeRender(() => {
       if (this.holdingBall) {
         const camForward = camera

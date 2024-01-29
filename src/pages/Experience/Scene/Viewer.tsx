@@ -6,6 +6,7 @@ import SceneComponent, { SceneEventArgs } from "./Scene";
 import {
   ArcRotateCamera,
   Engine,
+  FreeCamera,
   HavokPlugin,
   Nullable,
   Scene,
@@ -49,7 +50,8 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
   private engine: Engine | undefined;
   public scene: Scene | undefined;
   // private camera: ArcRotateCamera | undefined;
-  private camera: UniversalCamera | undefined;
+  // private camera: UniversalCamera | undefined;
+  private camera: FreeCamera | undefined;
 
   public inputManager: InputManager | undefined;
   public ball: Ball | undefined;
@@ -104,10 +106,11 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
   }
 
   prepareCamera = () => {
-    this.camera = new UniversalCamera(
+    this.camera = new FreeCamera(
       "MainCamera",
       new Vector3(0, 5, -5),
-      this.scene
+      this.scene,
+      true
     );
     this.camera.setTarget(new Vector3(0, 0, 180));
     this.camera.attachControl(this.canvas, true);

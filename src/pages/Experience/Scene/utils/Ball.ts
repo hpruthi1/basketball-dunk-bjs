@@ -1,5 +1,4 @@
 import {
-  ArcRotateCamera,
   Mesh,
   MeshBuilder,
   Observable,
@@ -39,11 +38,6 @@ export class Ball {
       this._scene
     );
 
-    // const net = this._scene.getMeshByName("net");
-    // const netPos = net?.getAbsolutePosition();
-    // if (netPos)
-    //   this.geometry.position = new Vector3(netPos.x, netPos.y + 3, netPos.z);
-
     this.geometry.rotation = new Vector3(
       Math.PI * 0.5,
       this.geometry.rotation.y,
@@ -66,8 +60,6 @@ export class Ball {
     this.geometry.material = material;
 
     this.observable = new Observable();
-
-    // this._camera.lockedTarget = this.geometry;
   }
 
   attachPhysicsComponent() {
