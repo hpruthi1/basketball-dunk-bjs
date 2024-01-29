@@ -4,6 +4,7 @@ import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import SceneComponent, { SceneEventArgs } from "./Scene";
 import {
+  ArcRotateCamera,
   Engine,
   HavokPlugin,
   Nullable,
@@ -47,6 +48,7 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
     | undefined;
   private engine: Engine | undefined;
   public scene: Scene | undefined;
+  // private camera: ArcRotateCamera | undefined;
   private camera: UniversalCamera | undefined;
 
   public inputManager: InputManager | undefined;
@@ -104,15 +106,30 @@ export class Viewer extends Component<IViewerProps, IViewerState> {
   prepareCamera = () => {
     this.camera = new UniversalCamera(
       "MainCamera",
-      new Vector3(0, 0, -5),
+      new Vector3(0, 5, -5),
       this.scene
     );
-    this.camera.setTarget(Vector3.Zero());
+    this.camera.setTarget(new Vector3(0, 0, 180));
     this.camera.attachControl(this.canvas, true);
 
     this.camera.speed = 0.2;
 
     this.camera.inputs.addMouseWheel();
+
+    // this.scene!.createDefaultCamera(true);
+    // const camera = this.scene!.activeCamera as ArcRotateCamera;
+    // this.camera = camera;
+    // this.camera.fov = 1;
+    // this.camera.alpha = 1.57;
+    // this.camera.beta = 1.3;
+    // this.camera.radius = 10;
+    // this.camera.minZ = 0;
+    // this.camera.panningSensibility = 0;
+    // this.camera.inputs.remove(this.camera.inputs.attached.keyboard);
+    // this.camera.inputs.remove(this.camera.inputs.attached.mousewheel);
+
+    // camera.alpha += Math.PI;
+    // this.camera.attachControl();
   };
 
   prepareLighting = () => {

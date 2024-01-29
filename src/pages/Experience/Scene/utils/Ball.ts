@@ -1,4 +1,5 @@
 import {
+  ArcRotateCamera,
   Mesh,
   MeshBuilder,
   Observable,
@@ -14,6 +15,7 @@ import {
 
 export class Ball {
   private _scene: Scene;
+  // private _camera: ArcRotateCamera;
   private _camera: UniversalCamera;
 
   public geometry: Mesh | undefined;
@@ -23,7 +25,9 @@ export class Ball {
 
   constructor(scene: Scene) {
     this._scene = scene;
+    // this._camera = this._scene.activeCamera as ArcRotateCamera;
     this._camera = this._scene.activeCamera as UniversalCamera;
+
     this.createGeometry();
     this.attachPhysicsComponent();
   }
@@ -62,6 +66,8 @@ export class Ball {
     this.geometry.material = material;
 
     this.observable = new Observable();
+
+    // this._camera.lockedTarget = this.geometry;
   }
 
   attachPhysicsComponent() {
@@ -72,9 +78,13 @@ export class Ball {
       this._scene
     );
 
+    this.aggregate.body.disablePreStep = false;
+
     this.aggregate.body.setMotionType(PhysicsMotionType.DYNAMIC);
 
     this.aggregate.body.setCollisionCallbackEnabled(true);
+
+    this.aggregate.body.setGravityFactor(0);
   }
 
   shoot(force: number = 30) {
